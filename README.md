@@ -12,7 +12,7 @@ This project aims to experimentally verify the Strong Law of Large Numbers (SLLN
 
 \* Ahmet Çakmak - 2211021054
 \* Fatih Özger - 2311021039
-\* Berkehan Aydoğan - 2311021008
+\* Berkehan Aydoğan - 2311021067
 \* Eylül Selinay Bayram - 2311021008
 
 
