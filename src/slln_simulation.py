@@ -1,36 +1,56 @@
-import os
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 
-# Number of samples
-n = 10000
+def run_slln_simulation(n_samples: int = 2000):
+    """
+    Demonstrates the Strong Law of Large Numbers (SLLN) simulation.
+    
+    This function generates a sequence of random variables (coin flips or dice rolls)
+    and plots the cumulative average. As the number of samples (n) increases,
+    the sample mean converges to the true expected value.
 
-# True mean of Uniform(0,1)
-mu = 0.5
+    Args:
+        n_samples (int): The total number of random experiments to perform.
+                         Default is 2000.
+    
+    Returns:
+        None: Saves the convergence plot to 'results/figures/slln_plot.png'.
+    """
+    
+    # 1. Setup output directory
+    out_dir = os.path.join("..", "results", "figures")
+    os.makedirs(out_dir, exist_ok=True)
+    
+    print(f"Running SLLN Simulation with {n_samples} samples...")
 
-# Generate samples
-x = np.random.uniform(0, 1, n)
+    # 2. Generate Data: Simulating a fair die roll (1 to 6)
+    # Expected Value (True Mean) = 3.5
+    data = np.random.randint(1, 7, n_samples)
+    true_mean = 3.5
 
-# Cumulative mean
-cumulative_mean = np.cumsum(x) / np.arange(1, n + 1)
+    # 3. Calculate Cumulative Averages
+    # cumsum() -> [x1, x1+x2, x1+x2+x3 ...]
+    cumulative_sum = np.cumsum(data)
+    sample_sizes = np.arange(1, n_samples + 1)
+    cumulative_averages = cumulative_sum / sample_sizes
 
-# Output directory
-out_dir = os.path.join("results", "figures")
-os.makedirs(out_dir, exist_ok=True)
+    # 4. Plotting
+    plt.figure(figsize=(10, 6))
+    plt.plot(cumulative_averages, label='Sample Mean', color='blue')
+    plt.axhline(y=true_mean, color='red', linestyle='--', label=f'True Mean ({true_mean})')
+    
+    plt.title('Strong Law of Large Numbers (SLLN) Verification')
+    plt.xlabel('Number of Samples (n)')
+    plt.ylabel('Cumulative Average')
+    plt.legend()
+    plt.grid(True, alpha=0.3)
+    
+    # 5. Save Figure
+    output_path = os.path.join(out_dir, "slln_plot.png")
+    plt.savefig(output_path)
+    print(f"SLLN plot saved to: {output_path}")
+    plt.close()
 
-# Plot
-plt.figure(figsize=(10, 5))
-plt.plot(cumulative_mean, label="Cumulative Mean")
-plt.axhline(mu, linestyle="--", label="True Mean = 0.5")
-plt.xlabel("n")
-plt.ylabel("Cumulative Mean")
-plt.title("SLLN Simulation for Uniform(0,1)")
-plt.legend()
-plt.tight_layout()
-
-# Save figure
-out_path = os.path.join(out_dir, "slln_convergence.png")
-plt.savefig(out_path)
-plt.close()
-
-print("Bitti → results/figures/slln_convergence.png")
+if __name__ == "__main__":
+    run_slln_simulation()
